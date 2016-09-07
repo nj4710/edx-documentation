@@ -17,17 +17,16 @@ problem component.
 Overview
 **********
 
-In custom Python-evaluated input (also called "write-your-own-grader"
-problems), the grader uses a Python script that you create and embed in the
-problem to evaluate a learner's response or provide hints. These problems can
-be any type. Numerical input and text input problems are the most common
+In custom Python-evaluated input (also called "write-your-own-grader")
+problems, you embed a Python script in the problem to evaluate a learner's
+response or provide hints. You can include any of the core CAPA problem types.
+Numerical input and text input problems are the most common
 write-your-own-grader problems.
 
 .. image:: ../../../shared/images/CustomPythonExample.png
  :alt: An image of a write-your-own-grader problem.
 
-
-Custom Python-evaluated input problems can include the following advanced
+Custom Python-evaluated input problems can also include the following advanced
 problem types.
 
 * :ref:`Chemical Equation`
@@ -36,12 +35,12 @@ problem types.
 * :ref:`Molecule Editor`
 * :ref:`Protein Builder`
 
-*****************************************************
-Create a Custom Python-Evaluated Input Problem Studio
-*****************************************************
+*******************************************
+Add a Custom Python-Evaluated Input Problem
+*******************************************
 
-#. In the unit where you want to create the problem, select **Problem** under
-   **Add New Component**, and then select the **Advanced** tab.
+#. In the unit where you want to create the problem, under
+   **Add New Component** select **Problem**, and then select **Advanced**.
 
 #. Select **Custom Python-Evaluated Input**.
 
@@ -51,19 +50,18 @@ Create a Custom Python-Evaluated Input Problem Studio
 
 #. Select **Save**.
 
-
 .. _Script Tag Format:
 
 **************************
-Script Tag Format
+Script Element Format
 **************************
 
-The script tag format encloses a Python script that contains a "check function"
-in a ``<script>`` tag, and adds the ``cfn`` attribute of the
-``<customresponse>`` tag to reference that function.
+The script element format encloses a Python script that contains a check
+function in a ``<script>`` element, and adds a ``cfn`` attribute to the
+``<customresponse>`` element to reference that function.
 
 This section contains the following information about using the ``<script>``
-tag.
+element.
 
 .. contents::
    :local:
@@ -73,7 +71,7 @@ tag.
 The ``check`` Function
 =======================
 
-The ``check`` function in a ``<script>`` tag accepts two arguments.
+The ``check`` function in a ``<script>`` element accepts two arguments.
 
 * ``expect`` is the value of the ``expect`` attribute of ``<customresponse>``.
   If ``expect`` is not provided as an argument, the function must have another
@@ -107,7 +105,7 @@ whether the learner's answer is correct.
   problem points. The ``msg`` is displayed below all response fields, and it
   can contain XHTML markup.
 
-* A dictionary of the form
+* A dictionary of this form.
 
   .. code-block:: xml
 
@@ -118,22 +116,23 @@ whether the learner's answer is correct.
             { 'ok': 'Partial', 'msg': 'Feedback for input 3'}
             ... ] }
 
-The last form is useful for responses that contain multiple response fields. It
-allows you to provide feedback for each response field individually, as well as
-a message that applies to the entire response.
+  The last form is useful for responses that contain multiple response fields.
+  It allows you to provide feedback for each response field individually, as
+  well as a message that applies to the entire response.
 
-===========================
-Example with the Script Tag
-===========================
+==============================
+Example Script Element Format
+==============================
 
-In the following example, ``<customresponse>`` tags reference the
+In the following example, ``<customresponse>`` elements reference the
 ``test_add_to_ten`` and ``test_add`` functions that are in the ``<script>``
-tag.
+element.
 
 .. Important::
- Python honors indentation. Within the ``<script>`` tag, the ``def
- check_func(expect, ans):`` line must have no indentation.
-
+  Python honors indentation. When you add a script to a problem component, do
+  not add to or change its internal indentation, particularly on the ``def
+  check_func(expect, ans):`` line. A "jailed code" error message appears when
+  you save the problem in Studio if the script element is indented.
 
 .. code-block:: xml
 
@@ -154,27 +153,27 @@ tag.
 
   </script>
 
-  <p>Enter two integers that sum to 10. </p>
-  <customresponse cfn="test_add_to_ten">
-    <textline size="10"/><br/>
-    <textline size="10"/>
-  </customresponse>
+    <customresponse cfn="test_add_to_ten">
+      <label>Enter two integers that sum to 10. </label>
+      <textline size="10"/><br/>
+      <textline size="10"/>
+    </customresponse>
 
-  <p>Enter two integers that sum to 20: </p>
-  <customresponse cfn="test_add" expect="20">
-    <textline size="40" correct_answer="11" label="Integer #1"/><br/>
-    <textline size="40" correct_answer="9" label="Integer #2"/>
-  </customresponse>
+    <customresponse cfn="test_add" expect="20">
+      <label>Enter two integers that sum to 20. </label>
+      <textline size="40" correct_answer="11" label="Integer #1"/><br/>
+      <textline size="40" correct_answer="9" label="Integer #2"/>
+    </customresponse>
 
-  <solution>
-    <div class="detailed-solution">
-      <p>Explanation</p>
-      <p>Any set of integers on the line \(y = 10 - x\) and \(y = 20 - x\)
-         satisfies these constraints.</p>
-      <p>You can also add images within the solution clause, like so:</p>
-      <img src="/static/images/placeholder-image.png"/>
-    </div>
-  </solution>
+    <solution>
+      <div class="detailed-solution">
+        <p>Explanation</p>
+        <p>Any set of integers on the line \(y = 10 - x\) and \(y = 20 - x\)
+           satisfies these constraints.</p>
+        <p>You can also add images within the solution clause, like so:</p>
+        <img src="/static/images/placeholder-image.png"/>
+      </div>
+    </solution>
 
   </problem>
 
@@ -183,7 +182,7 @@ tag.
 Example of the ``check`` Function Returning a Dictionary
 ========================================================
 
- The following example shows a ``check`` function that returns a dictionary.
+The following example shows a ``check`` function that returns a dictionary.
 
 .. code-block:: python
 
@@ -197,14 +196,14 @@ Example of the ``check`` Function Returning a Dictionary
                         { 'ok': check2, 'msg': 'Feedback 2'},
                         { 'ok': check3, 'msg': 'Feedback 3'} ] }
 
-The function checks that the user entered ``1`` for the first input, ``2`` for
-the  second input, and ``3`` for the third input. It provides feedback messages
-for each individual input, as well as a message displayed below the entire
-problem.
+The function checks that the learner's answer is ``1`` for the first input,
+``2`` for the  second input, and ``3`` for the third input. It provides
+feedback messages for each individual input, as well as a message displayed
+below the entire problem.
 
-======================
-Script Tag Attributes
-======================
+==========================
+Script Element Attributes
+==========================
 
 The following table explains the important attributes and values in the
 preceding example.
@@ -222,22 +221,12 @@ preceding example.
        checks the answers for this problem and that the expected answer is
        ``20``.
    * - <textline size="10" correct_answer="3"/>
-     - This tag includes the ``size``, ``correct_answer``, and ``label``
+     - This example includes the ``size``, ``correct_answer``, and ``label``
        attributes. The ``correct_answer`` attribute is optional.
 
-
-========================================================================
-Create a Custom Python-Evaluated Input Problem in Script Tag Format
-========================================================================
-
-To create a custom Python-evaluated input problem using a ``<script>`` tag,
-follow these steps.
-
-#. In the component editor, modify the example as needed.
-
-#. Select **Save**.
-
-**Problem Code**:
+=====================
+Example Problem OLX
+=====================
 
 .. code-block:: xml
 
