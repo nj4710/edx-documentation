@@ -273,6 +273,29 @@ steps.
      the Django administration panel in the LMS. For more information about
      configuring the OIDC client, see :ref:`Configure OIDC`.
 
+*****************************************
+Switching from ShoppingCart to E-Commerce
+*****************************************
+
+In order to enable the E-Commerce service to handle your ecommerce-related tasks
+you need to switch to it from the ShoppingCart service which is the default
+ecommerce-related task handler. To do that you need to:
+
+#. In your LMS Django admin panel, create a new Commerce configuration.
+
+#. Check the ``Enabled`` checkbox.
+
+#. Check the ``Checkout on ecommerce service`` checkbox.
+
+#. Fill in the ``Single course checkout page`` path value.
+
+   .. note:: 
+     The default is `/basket/single-item/` and if you change
+     that you need to change all the code that relies on that path.
+
+#. Set the ``Cache Time To Live``.
+
+#. Select the site for which you want to enable the E-Commerce service.
 
 
 .. _Development Outside Devstack:
